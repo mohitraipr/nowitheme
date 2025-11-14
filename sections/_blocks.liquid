@@ -1,0 +1,97 @@
+{% comment %}
+  Generic container section for AI generated content blocks.
+  Renders blocks stored in the /blocks directory so they can be managed from JSON templates.
+{% endcomment %}
+
+<section class="nowi-ai-blocks" data-section-id="{{ section.id }}" {{ section.shopify_attributes }}>
+  {% if section.blocks.size > 0 %}
+    {% for block in section.blocks %}
+      {% render block %}
+    {% endfor %}
+  {% else %}
+    <div class="nowi-ai-blocks__empty">
+      <h2 class="nowi-ai-blocks__empty-title">{{ 'nowi.blocks.empty_title' | t | default: 'No blocks added yet' }}</h2>
+      <p class="nowi-ai-blocks__empty-text">
+        {{ 'nowi.blocks.empty_text' | t | default: 'Use the theme editor to add one of the available content blocks.' }}
+      </p>
+    </div>
+  {% endif %}
+</section>
+
+{% style %}
+  .nowi-ai-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nowi-ai-blocks-gap, 0);
+  }
+
+  .nowi-ai-blocks__empty {
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    max-width: 52rem;
+    text-align: center;
+    border: 1px dashed rgba(16, 57, 72, 0.35);
+    border-radius: 1.25rem;
+    background: rgba(16, 57, 72, 0.04);
+    color: #103948;
+  }
+
+  .nowi-ai-blocks__empty-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .nowi-ai-blocks__empty-text {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(16, 57, 72, 0.75);
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "AI content blocks",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Add blocks from the list to compose this section"
+    }
+  ],
+  "blocks": [
+    { "type": "ai_gen_block_002f674", "name": "SEO text" },
+    { "type": "ai_gen_block_01be627", "name": "Featured section" },
+    { "type": "ai_gen_block_02a1a11", "name": "Shop by category" },
+    { "type": "ai_gen_block_0611f5a", "name": "Men's fashion page" },
+    { "type": "ai_gen_block_22992ce", "name": "Footer" },
+    { "type": "ai_gen_block_384488c", "name": "Luxury men's homepage" },
+    { "type": "ai_gen_block_4d68fce", "name": "Best sellers" },
+    { "type": "ai_gen_block_50f525e", "name": "Men's Hub" },
+    { "type": "ai_gen_block_5b1cddf", "name": "Email signup" },
+    { "type": "ai_gen_block_770f7f4", "name": "Trending now" },
+    { "type": "ai_gen_block_791f2cc", "name": "Category grid" },
+    { "type": "ai_gen_block_803f487", "name": "Hero banner" },
+    { "type": "ai_gen_block_98f8ebf", "name": "Campaign banner" },
+    { "type": "ai_gen_block_a51216b", "name": "Featured collections" },
+    { "type": "ai_gen_block_bb3de10", "name": "USP trust bar" },
+    { "type": "ai_gen_block_bbff591", "name": "New arrivals marquee" },
+    { "type": "ai_gen_block_bd2c001", "name": "Collection banner" },
+    { "type": "ai_gen_block_c24ffde", "name": "Hero with video" },
+    { "type": "ai_gen_block_d2bebfc", "name": "New arrivals" },
+    { "type": "ai_gen_block_eac4e59", "name": "Best sellers" }
+  ],
+  "presets": [
+    {
+      "name": "AI content layout",
+      "category": "AI generated",
+      "blocks": [
+        { "type": "ai_gen_block_c24ffde" },
+        { "type": "ai_gen_block_bbff591" },
+        { "type": "ai_gen_block_02a1a11" }
+      ]
+    }
+  ]
+}
+{% endschema %}
