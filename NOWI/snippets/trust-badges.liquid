@@ -1,0 +1,15 @@
+<div class="trust-badges">
+  {% for badge in badges %}
+    <div class="trust-badges__item">
+      {% if badge.icon != blank %}
+        <span class="trust-badges__icon">{{ badge.icon }}</span>
+      {% endif %}
+      <div class="trust-badges__content">
+        <p class="trust-badges__title">{{ badge.title }}</p>
+        {% if badge.text %}
+          <p class="trust-badges__text">{{ badge.text }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

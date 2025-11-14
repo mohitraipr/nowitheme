@@ -1,17 +1,18 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "collection",
-      "settings": {}
+      "settings": {
+        "products_per_page": 12,
+        "show_vendor": false,
+        "filter_button_label": "Filter",
+        "sort_label": "Sort by",
+        "filter_dialog_heading": "Filter & refine",
+        "filter_apply_label": "Apply filters",
+        "filter_clear_label": "Clear all",
+        "filter_price_from_label": "From",
+        "filter_price_to_label": "To"
+      }
     }
   },
   "order": [

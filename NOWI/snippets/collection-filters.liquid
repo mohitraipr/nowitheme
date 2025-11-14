@@ -1,0 +1,97 @@
+{% form 'collection', collection %}
+  {% if collection.sort_by != blank %}
+    <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+  {% endif %}
+  <div class="collection-filter__body">
+    {% for filter in collection.filters %}
+      <details class="collection-filter" {% if filter.active_values.size > 0 %}open{% endif %}>
+        <summary>{{ filter.label | escape }}</summary>
+        <div class="collection-filter__options">
+          {% case filter.type %}
+            {% when 'boolean' or 'list' %}
+              {% for value in filter.values %}
+                <label class="collection-filter__option">
+                  <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                  <span>{{ value.label | escape }}</span>
+                  <span class="collection-filter__count">{{ value.count }}</span>
+                </label>
+              {% endfor %}
+            {% when 'price_range' %}
+              <div class="collection-filter__price">
+                <label>
+                  {{ section.settings.filter_price_from_label | escape }}
+                  <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}" min="0">
+                </label>
+                <label>
+                  {{ section.settings.filter_price_to_label | escape }}
+                  <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}" min="0">
+                </label>
+              </div>
+          {% endcase %}
+        </div>
+      </details>
+    {% endfor %}
+  </div>
+  <div class="collection-filter__actions">
+    <button type="submit" class="collection-filter__apply">{{ section.settings.filter_apply_label | escape }}</button>
+    <a class="collection-filter__clear" href="{{ collection.url }}">{{ section.settings.filter_clear_label | escape }}</a>
+  </div>
+{% endform %}
+
+<style>
+  .collection-filter__body {
+    display: grid;
+    gap: 1rem;
+  }
+  .collection-filter {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.75rem;
+  }
+  .collection-filter summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .collection-filter__options {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  .collection-filter__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+  }
+  .collection-filter__option input {
+    accent-color: #111;
+  }
+  .collection-filter__price {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .collection-filter__price input {
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+  }
+  .collection-filter__actions {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+  }
+  .collection-filter__apply {
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+  }
+  .collection-filter__clear {
+    align-self: center;
+    text-decoration: underline;
+    color: inherit;
+  }
+</style>
