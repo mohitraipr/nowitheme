@@ -1,0 +1,1618 @@
+{% doc %}
+  @prompt
+    Mobile-first Men hub (Dawn 15.4) for {{BRAND_NAME}}. Use {{PRIMARY_COLOR_HEX}} for CTAs ({{ACCENT_HEX}} optional). Enable sticky header (scroll-up mobile), Men mega menu, predictive search. USP bar: “Free shipping over ₹{{THRESHOLD}} · 15-day easy returns · COD.”
+    
+    Page order:
+    1) Hero — “New For Him” + “Everyday fits. Premium fabrics. Built for India.” CTAs: /collections/men-new (primary), /collections/men-bestsellers (secondary).
+    2) Trust strip: Free shipping ₹{{THRESHOLD}} · 15-day returns · COD.
+    3) Tiles: Jeans → /collections/men-jeans; Trousers → /collections/men-trousers.
+    4) New Arrivals carousel from /collections/men-new with quick add, secondary img, compare-at, ratings/swatches.
+    5) Shop by Category grid → /collections/men-{shirts,polos,tees,co-ords,outerwear,athleisure,accessories}.
+    6) Size help → /pages/size-guide.
+    7) Bestsellers grid from /collections/men-bestsellers (quick add + badges).
+    8) Style the Look collage → /pages/looks.
+    9) Editorial banner → /collections/men-trousers.
+    10) Reviews/UGC via {{JUDGEME/YOTPO/NONE}}.
+    11) Email capture: “Get ₹150 off your first order.”
+    12) SEO paragraph.
+    
+    Collections UX: filters: Size, Color, Price, Availability, Discount, Fit, Fabric; quick add, badges; load-more. Imgs: prod 1:1 WebP ≥1200px; hero 2000×900–1200 d / 1080×1440 m; alt text. Tap ≥44px. PDPs: sticky ATC. Footer: Shop/Help/Company/Contact + WhatsApp
+    
+    SEO: Title “Men’s Clothing — Jeans, Trousers, Shirts & More | {{BRAND_NAME}}” | Meta “Shop men’s jeans, trousers, shirts, polos & co-ords from {{BRAND_NAME}}. Free shipping over ₹{{THRESHOLD}}, 15-day returns, COD available.”
+    
+    Events: men_hero_cta_click, men_category_click, men_new_quick_add, men_bestseller_add_to_cart, men_email_submit.
+    
+    Acceptance: links/filters/quick add/newsletter OK; Lighthouse Perf/SEO/A11y AA.
+    , it doesnot have what i asked for Mobile-first Men hub (Dawn 15.4) for {{BRAND_NAME}}. Use {{PRIMARY_COLOR_HEX}} for CTAs ({{ACCENT_HEX}} optional). Enable sticky header (scroll-up mobile), Men mega menu, predictive search. USP bar: “Free shipping over ₹{{THRESHOLD}} · 15-day easy returns · COD.”
+    
+    Page order:
+    1) Hero — “New For Him” + “Everyday fits. Premium fabrics. Built for India.” CTAs: /collections/men-new (primary), /collections/men-bestsellers (secondary).
+    2) Trust strip: Free shipping ₹{{THRESHOLD}} · 15-day returns · COD.
+    3) Tiles: Jeans → /collections/men-jeans; Trousers → /collections/men-trousers.
+    4) New Arrivals carousel from /collections/men-new with quick add, secondary img, compare-at, ratings/swatches.
+    5) Shop by Category grid → /collections/men-{shirts,polos,tees,co-ords,outerwear,athleisure,accessories}.
+    6) Size help → /pages/size-guide.
+    7) Bestsellers grid from /collections/men-bestsellers (quick add + badges).
+    8) Style the Look collage → /pages/looks.
+    9) Editorial banner → /collections/men-trousers.
+    10) Reviews/UGC via {{JUDGEME/YOTPO/NONE}}.
+    11) Email capture: “Get ₹150 off your first order.”
+    12) SEO paragraph.
+    
+    Collections UX: filters: Size, Color, Price, Availability, Discount, Fit, Fabric; quick add, badges; load-more. Imgs: prod 1:1 WebP ≥1200px; hero 2000×900–1200 d / 1080×1440 m; alt text. Tap ≥44px. PDPs: sticky ATC. Footer: Shop/Help/Company/Contact + WhatsApp
+    
+    SEO: Title “Men’s Clothing — Jeans, Trousers, Shirts & More | {{BRAND_NAME}}” | Meta “Shop men’s jeans, trousers, shirts, polos & co-ords from {{BRAND_NAME}}. Free shipping over ₹{{THRESHOLD}}, 15-day returns, COD available.”
+    
+    Events: men_hero_cta_click, men_category_click, men_new_quick_add, men_bestseller_add_to_cart, men_email_submit.
+    
+    Acceptance: links/filters/quick add/newsletter OK; Lighthouse Perf/SEO/A11y AA.
+    
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .men-hub-{{ ai_gen_id }} {
+    width: 100%;
+  }
+
+  .men-hub-section-{{ ai_gen_id }} {
+    margin-bottom: {{ block.settings.section_spacing }}px;
+  }
+
+  .men-hub-hero-{{ ai_gen_id }} {
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: {{ block.settings.hero_text_color }};
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+    overflow: hidden;
+  }
+
+  .men-hub-hero-bg-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+
+  .men-hub-hero-content-{{ ai_gen_id }} {
+    max-width: 600px;
+    padding: 40px 20px;
+    z-index: 2;
+  }
+
+  .men-hub-hero-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.hero_title_size }}px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .men-hub-hero-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.hero_subtitle_size }}px;
+    margin-bottom: 32px;
+    opacity: 0.9;
+    line-height: 1.4;
+  }
+
+  .men-hub-hero-buttons-{{ ai_gen_id }} {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .men-hub-btn-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: {{ block.settings.button_radius }}px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    min-height: 48px;
+    min-width: 120px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .men-hub-btn-primary-{{ ai_gen_id }} {
+    background-color: {{ block.settings.primary_color }};
+    color: {{ block.settings.primary_button_text }};
+  }
+
+  .men-hub-btn-primary-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.primary_hover_color }};
+    transform: translateY(-2px);
+  }
+
+  .men-hub-btn-secondary-{{ ai_gen_id }} {
+    background-color: transparent;
+    color: {{ block.settings.secondary_button_text }};
+    border-color: {{ block.settings.secondary_button_text }};
+  }
+
+  .men-hub-btn-secondary-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.secondary_button_text }};
+    color: {{ block.settings.secondary_hover_text }};
+  }
+
+  .men-hub-trust-strip-{{ ai_gen_id }} {
+    background-color: {{ block.settings.trust_bg_color }};
+    color: {{ block.settings.trust_text_color }};
+    padding: 16px 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .men-hub-tiles-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 0 20px;
+  }
+
+  .men-hub-tile-{{ ai_gen_id }} {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: {{ block.settings.tile_radius }}px;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+  }
+
+  .men-hub-tile-bg-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: transform 0.3s ease;
+  }
+
+  .men-hub-tile-{{ ai_gen_id }}:hover .men-hub-tile-bg-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .men-hub-tile-title-{{ ai_gen_id }} {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    z-index: 2;
+  }
+
+  .men-hub-carousel-{{ ai_gen_id }} {
+    padding: 0 20px;
+  }
+
+  .men-hub-carousel-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .men-hub-carousel-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.section_title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.text_color }};
+  }
+
+  .men-hub-carousel-nav-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+  }
+
+  .men-hub-carousel-btn-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid {{ block.settings.border_color }};
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .men-hub-carousel-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.primary_color }};
+    color: white;
+  }
+
+  .men-hub-carousel-container-{{ ai_gen_id }} {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .men-hub-carousel-container-{{ ai_gen_id }}::-webkit-scrollbar {
+    display: none;
+  }
+
+  .men-hub-carousel-track-{{ ai_gen_id }} {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+
+  .men-hub-product-card-{{ ai_gen_id }} {
+    flex: 0 0 280px;
+    background: white;
+    border-radius: {{ block.settings.card_radius }}px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .men-hub-product-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+  }
+
+  .men-hub-product-image-{{ ai_gen_id }} {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .men-hub-product-img-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+  }
+
+  .men-hub-product-img-secondary-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  .men-hub-product-card-{{ ai_gen_id }}:hover .men-hub-product-img-secondary-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .men-hub-product-badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: {{ block.settings.badge_color }};
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .men-hub-quick-add-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: {{ block.settings.primary_color }};
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+
+  .men-hub-product-card-{{ ai_gen_id }}:hover .men-hub-quick-add-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .men-hub-product-info-{{ ai_gen_id }} {
+    padding: 16px;
+  }
+
+  .men-hub-product-title-{{ ai_gen_id }} {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.3;
+  }
+
+  .men-hub-product-price-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .men-hub-price-current-{{ ai_gen_id }} {
+    font-size: 18px;
+    font-weight: 700;
+    color: {{ block.settings.price_color }};
+  }
+
+  .men-hub-price-compare-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .men-hub-product-rating-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .men-hub-stars-{{ ai_gen_id }} {
+    color: #ffc107;
+    font-size: 14px;
+  }
+
+  .men-hub-rating-count-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .men-hub-product-swatches-{{ ai_gen_id }} {
+    display: flex;
+    gap: 6px;
+  }
+
+  .men-hub-swatch-{{ ai_gen_id }} {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    cursor: pointer;
+  }
+
+  .men-hub-category-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0 20px;
+  }
+
+  .men-hub-category-card-{{ ai_gen_id }} {
+    position: relative;
+    aspect-ratio: 4/3;
+    border-radius: {{ block.settings.card_radius }}px;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: end;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  }
+
+  .men-hub-category-bg-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: transform 0.3s ease;
+  }
+
+  .men-hub-category-card-{{ ai_gen_id }}:hover .men-hub-category-bg-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .men-hub-category-title-{{ ai_gen_id }} {
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    z-index: 2;
+  }
+
+  .men-hub-size-help-{{ ai_gen_id }} {
+    background: {{ block.settings.size_help_bg }};
+    padding: 32px 20px;
+    text-align: center;
+    border-radius: {{ block.settings.card_radius }}px;
+    margin: 0 20px;
+  }
+
+  .men-hub-size-help-title-{{ ai_gen_id }} {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .men-hub-size-help-text-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+
+  .men-hub-bestsellers-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0 20px;
+  }
+
+  .men-hub-style-collage-{{ ai_gen_id }} {
+    position: relative;
+    aspect-ratio: 16/9;
+    border-radius: {{ block.settings.card_radius }}px;
+    overflow: hidden;
+    margin: 0 20px;
+    background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+  }
+
+  .men-hub-style-bg-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: transform 0.3s ease;
+  }
+
+  .men-hub-style-collage-{{ ai_gen_id }}:hover .men-hub-style-bg-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .men-hub-style-content-{{ ai_gen_id }} {
+    text-align: center;
+    z-index: 2;
+  }
+
+  .men-hub-style-title-{{ ai_gen_id }} {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .men-hub-style-subtitle-{{ ai_gen_id }} {
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  .men-hub-editorial-{{ ai_gen_id }} {
+    position: relative;
+    aspect-ratio: 2/1;
+    border-radius: {{ block.settings.card_radius }}px;
+    overflow: hidden;
+    margin: 0 20px;
+    background: linear-gradient(to right, rgba(0,0,0,0.6), transparent);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+  }
+
+  .men-hub-editorial-bg-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: transform 0.3s ease;
+  }
+
+  .men-hub-editorial-{{ ai_gen_id }}:hover .men-hub-editorial-bg-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .men-hub-editorial-content-{{ ai_gen_id }} {
+    padding: 40px;
+    z-index: 2;
+    max-width: 50%;
+  }
+
+  .men-hub-editorial-title-{{ ai_gen_id }} {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .men-hub-editorial-text-{{ ai_gen_id }} {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: 24px;
+  }
+
+  .men-hub-reviews-{{ ai_gen_id }} {
+    padding: 40px 20px;
+    text-align: center;
+    background: {{ block.settings.reviews_bg }};
+  }
+
+  .men-hub-reviews-title-{{ ai_gen_id }} {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .men-hub-reviews-placeholder-{{ ai_gen_id }} {
+    padding: 40px;
+    background: white;
+    border-radius: {{ block.settings.card_radius }}px;
+    border: 2px dashed #ddd;
+    color: #666;
+    font-style: italic;
+  }
+
+  .men-hub-email-capture-{{ ai_gen_id }} {
+    background: {{ block.settings.email_bg }};
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .men-hub-email-title-{{ ai_gen_id }} {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: {{ block.settings.email_text_color }};
+  }
+
+  .men-hub-email-subtitle-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ block.settings.email_text_color }};
+    opacity: 0.8;
+    margin-bottom: 24px;
+  }
+
+  .men-hub-email-form-{{ ai_gen_id }} {
+    display: flex;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .men-hub-email-input-{{ ai_gen_id }} {
+    flex: 1;
+    padding: 14px 16px;
+    border: 1px solid #ddd;
+    border-radius: {{ block.settings.input_radius }}px;
+    font-size: 16px;
+  }
+
+  .men-hub-email-btn-{{ ai_gen_id }} {
+    padding: 14px 24px;
+    background: {{ block.settings.primary_color }};
+    color: white;
+    border: none;
+    border-radius: {{ block.settings.button_radius }}px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 48px;
+  }
+
+  .men-hub-seo-{{ ai_gen_id }} {
+    padding: 40px 20px;
+    text-align: center;
+    background: #f9f9f9;
+  }
+
+  .men-hub-seo-content-{{ ai_gen_id }} {
+    max-width: 800px;
+    margin: 0 auto;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    .men-hub-hero-{{ ai_gen_id }} {
+      min-height: 600px;
+    }
+
+    .men-hub-hero-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.hero_title_size | times: 1.5 }}px;
+    }
+
+    .men-hub-hero-subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.hero_subtitle_size | times: 1.2 }}px;
+    }
+
+    .men-hub-tiles-{{ ai_gen_id }} {
+      gap: 24px;
+      padding: 0 40px;
+    }
+
+    .men-hub-carousel-{{ ai_gen_id }},
+    .men-hub-category-grid-{{ ai_gen_id }},
+    .men-hub-bestsellers-grid-{{ ai_gen_id }} {
+      padding: 0 40px;
+    }
+
+    .men-hub-category-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .men-hub-bestsellers-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .men-hub-email-form-{{ ai_gen_id }} {
+      flex-direction: row;
+    }
+
+    .men-hub-style-collage-{{ ai_gen_id }},
+    .men-hub-editorial-{{ ai_gen_id }},
+    .men-hub-size-help-{{ ai_gen_id }} {
+      margin: 0 40px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .men-hub-email-form-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .men-hub-hero-buttons-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .men-hub-btn-{{ ai_gen_id }} {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+{% endstyle %}
+
+<div class="men-hub-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <!-- 1. Hero Section -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-hero-{{ ai_gen_id }}">
+      {% if block.settings.hero_image %}
+        <img 
+          src="{{ block.settings.hero_image | image_url: width: 2000 }}" 
+          alt="{{ block.settings.hero_image.alt | escape }}"
+          class="men-hub-hero-bg-{{ ai_gen_id }}"
+          loading="lazy"
+          width="2000"
+          height="900"
+        >
+      {% else %}
+        <div class="men-hub-hero-bg-{{ ai_gen_id }}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+      {% endif %}
+      
+      <div class="men-hub-hero-content-{{ ai_gen_id }}">
+        <h1 class="men-hub-hero-title-{{ ai_gen_id }}">{{ block.settings.hero_title }}</h1>
+        <p class="men-hub-hero-subtitle-{{ ai_gen_id }}">{{ block.settings.hero_subtitle }}</p>
+        
+        <div class="men-hub-hero-buttons-{{ ai_gen_id }}">
+          <a 
+            href="{{ block.settings.primary_cta_link }}" 
+            class="men-hub-btn-{{ ai_gen_id }} men-hub-btn-primary-{{ ai_gen_id }}"
+            onclick="gtag('event', 'men_hero_cta_click', { 'button_type': 'primary', 'link': '{{ block.settings.primary_cta_link }}' });"
+          >
+            {{ block.settings.primary_cta_text }}
+          </a>
+          <a 
+            href="{{ block.settings.secondary_cta_link }}" 
+            class="men-hub-btn-{{ ai_gen_id }} men-hub-btn-secondary-{{ ai_gen_id }}"
+            onclick="gtag('event', 'men_hero_cta_click', { 'button_type': 'secondary', 'link': '{{ block.settings.secondary_cta_link }}' });"
+          >
+            {{ block.settings.secondary_cta_text }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Trust Strip -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-trust-strip-{{ ai_gen_id }}">
+      {{ block.settings.trust_message }}
+    </div>
+  </section>
+
+  <!-- 3. Category Tiles -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-tiles-{{ ai_gen_id }}">
+      <a 
+        href="{{ block.settings.jeans_link }}" 
+        class="men-hub-tile-{{ ai_gen_id }}"
+        onclick="gtag('event', 'men_category_click', { 'category': 'jeans' });"
+      >
+        {% if block.settings.jeans_image %}
+          <img 
+            src="{{ block.settings.jeans_image | image_url: width: 600 }}" 
+            alt="Jeans"
+            class="men-hub-tile-bg-{{ ai_gen_id }}"
+            loading="lazy"
+          >
+        {% endif %}
+        <h3 class="men-hub-tile-title-{{ ai_gen_id }}">Jeans</h3>
+      </a>
+      
+      <a 
+        href="{{ block.settings.trousers_link }}" 
+        class="men-hub-tile-{{ ai_gen_id }}"
+        onclick="gtag('event', 'men_category_click', { 'category': 'trousers' });"
+      >
+        {% if block.settings.trousers_image %}
+          <img 
+            src="{{ block.settings.trousers_image | image_url: width: 600 }}" 
+            alt="Trousers"
+            class="men-hub-tile-bg-{{ ai_gen_id }}"
+            loading="lazy"
+          >
+        {% endif %}
+        <h3 class="men-hub-tile-title-{{ ai_gen_id }}">Trousers</h3>
+      </a>
+    </div>
+  </section>
+
+  <!-- 4. New Arrivals Carousel -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-carousel-{{ ai_gen_id }}">
+      <div class="men-hub-carousel-header-{{ ai_gen_id }}">
+        <h2 class="men-hub-carousel-title-{{ ai_gen_id }}">{{ block.settings.new_arrivals_title }}</h2>
+        <div class="men-hub-carousel-nav-{{ ai_gen_id }}">
+          <button class="men-hub-carousel-btn-{{ ai_gen_id }}" onclick="scrollCarousel('{{ ai_gen_id }}', 'left')">‹</button>
+          <button class="men-hub-carousel-btn-{{ ai_gen_id }}" onclick="scrollCarousel('{{ ai_gen_id }}', 'right')">›</button>
+        </div>
+      </div>
+      
+      <div class="men-hub-carousel-container-{{ ai_gen_id }}" id="carousel-{{ ai_gen_id }}">
+        <div class="men-hub-carousel-track-{{ ai_gen_id }}">
+          {% if block.settings.new_arrivals_collection %}
+            {% for product in collections[block.settings.new_arrivals_collection].products limit: 8 %}
+              <div class="men-hub-product-card-{{ ai_gen_id }}">
+                <div class="men-hub-product-image-{{ ai_gen_id }}">
+                  {% if product.featured_image %}
+                    <img 
+                      src="{{ product.featured_image | image_url: width: 400 }}" 
+                      alt="{{ product.featured_image.alt | escape }}"
+                      class="men-hub-product-img-{{ ai_gen_id }}"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                  
+                  {% if product.images[1] %}
+                    <img 
+                      src="{{ product.images[1] | image_url: width: 400 }}" 
+                      alt="{{ product.images[1].alt | escape }}"
+                      class="men-hub-product-img-{{ ai_gen_id }} men-hub-product-img-secondary-{{ ai_gen_id }}"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                  
+                  {% if product.compare_at_price > product.price %}
+                    <div class="men-hub-product-badge-{{ ai_gen_id }}">
+                      Sale
+                    </div>
+                  {% endif %}
+                  
+                  <button 
+                    class="men-hub-quick-add-{{ ai_gen_id }}"
+                    onclick="quickAdd('{{ product.id }}'); gtag('event', 'men_new_quick_add', { 'product_id': '{{ product.id }}' });"
+                    aria-label="Quick add {{ product.title }}"
+                  >
+                    +
+                  </button>
+                </div>
+                
+                <div class="men-hub-product-info-{{ ai_gen_id }}">
+                  <h3 class="men-hub-product-title-{{ ai_gen_id }}">
+                    <a href="{{ product.url }}">{{ product.title }}</a>
+                  </h3>
+                  
+                  <div class="men-hub-product-price-{{ ai_gen_id }}">
+                    <span class="men-hub-price-current-{{ ai_gen_id }}">{{ product.price | money }}</span>
+                    {% if product.compare_at_price > product.price %}
+                      <span class="men-hub-price-compare-{{ ai_gen_id }}">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                  </div>
+                  
+                  <div class="men-hub-product-rating-{{ ai_gen_id }}">
+                    <div class="men-hub-stars-{{ ai_gen_id }}">★★★★☆</div>
+                    <span class="men-hub-rating-count-{{ ai_gen_id }}">({{ product.metafields.reviews.rating_count | default: '0' }})</span>
+                  </div>
+                  
+                  {% if product.options contains 'Color' %}
+                    <div class="men-hub-product-swatches-{{ ai_gen_id }}">
+                      {% for variant in product.variants limit: 4 %}
+                        {% if variant.option1 != blank %}
+                          <div class="men-hub-swatch-{{ ai_gen_id }}" style="background-color: {{ variant.option1 | downcase }};"></div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            {% for i in (1..6) %}
+              <div class="men-hub-product-card-{{ ai_gen_id }}">
+                <div class="men-hub-product-image-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag: 'men-hub-product-img-' | append: ai_gen_id }}
+                </div>
+                <div class="men-hub-product-info-{{ ai_gen_id }}">
+                  <h3 class="men-hub-product-title-{{ ai_gen_id }}">Sample Product {{ i }}</h3>
+                  <div class="men-hub-product-price-{{ ai_gen_id }}">
+                    <span class="men-hub-price-current-{{ ai_gen_id }}">₹2,999</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Shop by Category Grid -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-carousel-header-{{ ai_gen_id }}" style="padding: 0 20px;">
+      <h2 class="men-hub-carousel-title-{{ ai_gen_id }}">{{ block.settings.category_title }}</h2>
+    </div>
+    
+    <div class="men-hub-category-grid-{{ ai_gen_id }}">
+      {% assign categories = 'shirts,polos,tees,co-ords,outerwear,athleisure,accessories' | split: ',' %}
+      {% for category in categories %}
+        <a 
+          href="/collections/men-{{ category }}" 
+          class="men-hub-category-card-{{ ai_gen_id }}"
+          onclick="gtag('event', 'men_category_click', { 'category': '{{ category }}' });"
+        >
+          {% assign category_image_key = category | append: '_image' %}
+          {% if block.settings[category_image_key] %}
+            <img 
+              src="{{ block.settings[category_image_key] | image_url: width: 600 }}" 
+              alt="{{ category | capitalize }}"
+              class="men-hub-category-bg-{{ ai_gen_id }}"
+              loading="lazy"
+            >
+          {% else %}
+            {{ 'collection-1' | placeholder_svg_tag: 'men-hub-category-bg-' | append: ai_gen_id }}
+          {% endif %}
+          <h3 class="men-hub-category-title-{{ ai_gen_id }}">{{ category | capitalize }}</h3>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 6. Size Help -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-size-help-{{ ai_gen_id }}">
+      <h2 class="men-hub-size-help-title-{{ ai_gen_id }}">{{ block.settings.size_help_title }}</h2>
+      <p class="men-hub-size-help-text-{{ ai_gen_id }}">{{ block.settings.size_help_text }}</p>
+      <a href="{{ block.settings.size_guide_link }}" class="men-hub-btn-{{ ai_gen_id }} men-hub-btn-primary-{{ ai_gen_id }}">
+        {{ block.settings.size_help_button }}
+      </a>
+    </div>
+  </section>
+
+  <!-- 7. Bestsellers Grid -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-carousel-header-{{ ai_gen_id }}" style="padding: 0 20px;">
+      <h2 class="men-hub-carousel-title-{{ ai_gen_id }}">{{ block.settings.bestsellers_title }}</h2>
+    </div>
+    
+    <div class="men-hub-bestsellers-grid-{{ ai_gen_id }}">
+      {% if block.settings.bestsellers_collection %}
+        {% for product in collections[block.settings.bestsellers_collection].products limit: 8 %}
+          <div class="men-hub-product-card-{{ ai_gen_id }}">
+            <div class="men-hub-product-image-{{ ai_gen_id }}">
+              {% if product.featured_image %}
+                <img 
+                  src="{{ product.featured_image | image_url: width: 400 }}" 
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="men-hub-product-img-{{ ai_gen_id }}"
+                  loading="lazy"
+                >
+              {% endif %}
+              
+              <div class="men-hub-product-badge-{{ ai_gen_id }}">
+                Bestseller
+              </div>
+              
+              <button 
+                class="men-hub-quick-add-{{ ai_gen_id }}"
+                onclick="quickAdd('{{ product.id }}'); gtag('event', 'men_bestseller_add_to_cart', { 'product_id': '{{ product.id }}' });"
+                aria-label="Quick add {{ product.title }}"
+              >
+                +
+              </button>
+            </div>
+            
+            <div class="men-hub-product-info-{{ ai_gen_id }}">
+              <h3 class="men-hub-product-title-{{ ai_gen_id }}">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+              <div class="men-hub-product-price-{{ ai_gen_id }}">
+                <span class="men-hub-price-current-{{ ai_gen_id }}">{{ product.price | money }}</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..4) %}
+          <div class="men-hub-product-card-{{ ai_gen_id }}">
+            <div class="men-hub-product-image-{{ ai_gen_id }}">
+              {{ 'product-1' | placeholder_svg_tag: 'men-hub-product-img-' | append: ai_gen_id }}
+              <div class="men-hub-product-badge-{{ ai_gen_id }}">Bestseller</div>
+            </div>
+            <div class="men-hub-product-info-{{ ai_gen_id }}">
+              <h3 class="men-hub-product-title-{{ ai_gen_id }}">Bestseller {{ i }}</h3>
+              <div class="men-hub-product-price-{{ ai_gen_id }}">
+                <span class="men-hub-price-current-{{ ai_gen_id }}">₹3,499</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- 8. Style the Look Collage -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <a href="{{ block.settings.style_look_link }}" class="men-hub-style-collage-{{ ai_gen_id }}">
+      {% if block.settings.style_look_image %}
+        <img 
+          src="{{ block.settings.style_look_image | image_url: width: 1200 }}" 
+          alt="{{ block.settings.style_look_image.alt | escape }}"
+          class="men-hub-style-bg-{{ ai_gen_id }}"
+          loading="lazy"
+        >
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'men-hub-style-bg-' | append: ai_gen_id }}
+      {% endif %}
+      
+      <div class="men-hub-style-content-{{ ai_gen_id }}">
+        <h2 class="men-hub-style-title-{{ ai_gen_id }}">{{ block.settings.style_look_title }}</h2>
+        <p class="men-hub-style-subtitle-{{ ai_gen_id }}">{{ block.settings.style_look_subtitle }}</p>
+      </div>
+    </a>
+  </section>
+
+  <!-- 9. Editorial Banner -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <a href="{{ block.settings.editorial_link }}" class="men-hub-editorial-{{ ai_gen_id }}">
+      {% if block.settings.editorial_image %}
+        <img 
+          src="{{ block.settings.editorial_image | image_url: width: 1200 }}" 
+          alt="{{ block.settings.editorial_image.alt | escape }}"
+          class="men-hub-editorial-bg-{{ ai_gen_id }}"
+          loading="lazy"
+        >
+      {% else %}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'men-hub-editorial-bg-' | append: ai_gen_id }}
+      {% endif %}
+      
+      <div class="men-hub-editorial-content-{{ ai_gen_id }}">
+        <h2 class="men-hub-editorial-title-{{ ai_gen_id }}">{{ block.settings.editorial_title }}</h2>
+        <p class="men-hub-editorial-text-{{ ai_gen_id }}">{{ block.settings.editorial_text }}</p>
+        <div class="men-hub-btn-{{ ai_gen_id }} men-hub-btn-secondary-{{ ai_gen_id }}">
+          {{ block.settings.editorial_button }}
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <!-- 10. Reviews/UGC -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-reviews-{{ ai_gen_id }}">
+      <h2 class="men-hub-reviews-title-{{ ai_gen_id }}">{{ block.settings.reviews_title }}</h2>
+      
+      {% if block.settings.reviews_type == 'judgeme' %}
+        <div id="judgeme_product_reviews" data-product-id="all"></div>
+      {% elsif block.settings.reviews_type == 'yotpo' %}
+        <div class="yotpo yotpo-main-widget" data-product-id="all"></div>
+      {% else %}
+        <div class="men-hub-reviews-placeholder-{{ ai_gen_id }}">
+          Reviews and UGC content will appear here when configured
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- 11. Email Capture -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-email-capture-{{ ai_gen_id }}">
+      <h2 class="men-hub-email-title-{{ ai_gen_id }}">{{ block.settings.email_title }}</h2>
+      <p class="men-hub-email-subtitle-{{ ai_gen_id }}">{{ block.settings.email_subtitle }}</p>
+      
+      <form class="men-hub-email-form-{{ ai_gen_id }}" action="/contact#newsletter" method="post" accept-charset="UTF-8">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        
+        <input 
+          type="email" 
+          name="contact[email]" 
+          class="men-hub-email-input-{{ ai_gen_id }}"
+          placeholder="{{ block.settings.email_placeholder }}"
+          required
+          aria-label="Email address"
+        >
+        
+        <button 
+          type="submit" 
+          class="men-hub-email-btn-{{ ai_gen_id }}"
+          onclick="gtag('event', 'men_email_submit', { 'source': 'men_hub' });"
+        >
+          {{ block.settings.email_button }}
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 12. SEO Content -->
+  <section class="men-hub-section-{{ ai_gen_id }}">
+    <div class="men-hub-seo-{{ ai_gen_id }}">
+      <div class="men-hub-seo-content-{{ ai_gen_id }}">
+        {{ block.settings.seo_content }}
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  function scrollCarousel(id, direction) {
+    const container = document.getElementById('carousel-' + id);
+    const scrollAmount = 300;
+    
+    if (direction === 'left') {
+      container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
+
+  function quickAdd(productId) {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: productId,
+        quantity: 1
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (window.theme && window.theme.cart) {
+        window.theme.cart.refresh();
+      }
+      alert('Product added to cart!');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error adding product to cart');
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Men's Hub",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Section"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero background image"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title",
+      "default": "New For Him"
+    },
+    {
+      "type": "text",
+      "id": "hero_subtitle",
+      "label": "Hero subtitle",
+      "default": "Everyday fits. Premium fabrics. Built for India."
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_text",
+      "label": "Primary CTA text",
+      "default": "Shop New Arrivals"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary CTA text",
+      "default": "Shop Bestsellers"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA link"
+    },
+    {
+      "type": "range",
+      "id": "hero_title_size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Hero title size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "hero_subtitle_size",
+      "min": 14,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Hero subtitle size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "hero_text_color",
+      "label": "Hero text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Trust Strip"
+    },
+    {
+      "type": "text",
+      "id": "trust_message",
+      "label": "Trust message",
+      "default": "Free shipping over ₹999 · 15-day easy returns · COD"
+    },
+    {
+      "type": "color",
+      "id": "trust_bg_color",
+      "label": "Trust strip background",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "trust_text_color",
+      "label": "Trust strip text color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Category Tiles"
+    },
+    {
+      "type": "image_picker",
+      "id": "jeans_image",
+      "label": "Jeans tile image"
+    },
+    {
+      "type": "url",
+      "id": "jeans_link",
+      "label": "Jeans link"
+    },
+    {
+      "type": "image_picker",
+      "id": "trousers_image",
+      "label": "Trousers tile image"
+    },
+    {
+      "type": "url",
+      "id": "trousers_link",
+      "label": "Trousers link"
+    },
+    {
+      "type": "header",
+      "content": "New Arrivals"
+    },
+    {
+      "type": "text",
+      "id": "new_arrivals_title",
+      "label": "New arrivals title",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "collection",
+      "id": "new_arrivals_collection",
+      "label": "New arrivals collection"
+    },
+    {
+      "type": "header",
+      "content": "Shop by Category"
+    },
+    {
+      "type": "text",
+      "id": "category_title",
+      "label": "Category section title",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "image_picker",
+      "id": "shirts_image",
+      "label": "Shirts category image"
+    },
+    {
+      "type": "image_picker",
+      "id": "polos_image",
+      "label": "Polos category image"
+    },
+    {
+      "type": "image_picker",
+      "id": "tees_image",
+      "label": "Tees category image"
+    },
+    {
+      "type": "image_picker",
+      "id": "co-ords_image",
+      "label": "Co-ords category image"
+    },
+    {
+      "type": "image_picker",
+      "id": "outerwear_image",
+      "label": "Outerwear category image"
+    },
+    {
+      "type": "image_picker",
+      "id": "athleisure_image",
+      "label": "Athleisure category image"
+    },
+    {
+      "type": "image_picker",
+      "id": "accessories_image",
+      "label": "Accessories category image"
+    },
+    {
+      "type": "header",
+      "content": "Size Help"
+    },
+    {
+      "type": "text",
+      "id": "size_help_title",
+      "label": "Size help title",
+      "default": "Find Your Perfect Fit"
+    },
+    {
+      "type": "text",
+      "id": "size_help_text",
+      "label": "Size help text",
+      "default": "Not sure about your size? Check our comprehensive size guide."
+    },
+    {
+      "type": "text",
+      "id": "size_help_button",
+      "label": "Size help button text",
+      "default": "Size Guide"
+    },
+    {
+      "type": "url",
+      "id": "size_guide_link",
+      "label": "Size guide link"
+    },
+    {
+      "type": "color",
+      "id": "size_help_bg",
+      "label": "Size help background",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "header",
+      "content": "Bestsellers"
+    },
+    {
+      "type": "text",
+      "id": "bestsellers_title",
+      "label": "Bestsellers title",
+      "default": "Bestsellers"
+    },
+    {
+      "type": "collection",
+      "id": "bestsellers_collection",
+      "label": "Bestsellers collection"
+    },
+    {
+      "type": "header",
+      "content": "Style the Look"
+    },
+    {
+      "type": "image_picker",
+      "id": "style_look_image",
+      "label": "Style the look image"
+    },
+    {
+      "type": "text",
+      "id": "style_look_title",
+      "label": "Style the look title",
+      "default": "Style the Look"
+    },
+    {
+      "type": "text",
+      "id": "style_look_subtitle",
+      "label": "Style the look subtitle",
+      "default": "Get inspired by our curated looks"
+    },
+    {
+      "type": "url",
+      "id": "style_look_link",
+      "label": "Style the look link"
+    },
+    {
+      "type": "header",
+      "content": "Editorial Banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "editorial_image",
+      "label": "Editorial banner image"
+    },
+    {
+      "type": "text",
+      "id": "editorial_title",
+      "label": "Editorial title",
+      "default": "Premium Trousers"
+    },
+    {
+      "type": "text",
+      "id": "editorial_text",
+      "label": "Editorial text",
+      "default": "Discover our collection of premium trousers crafted for the modern man."
+    },
+    {
+      "type": "text",
+      "id": "editorial_button",
+      "label": "Editorial button text",
+      "default": "Shop Trousers"
+    },
+    {
+      "type": "url",
+      "id": "editorial_link",
+      "label": "Editorial link"
+    },
+    {
+      "type": "header",
+      "content": "Reviews"
+    },
+    {
+      "type": "text",
+      "id": "reviews_title",
+      "label": "Reviews section title",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "select",
+      "id": "reviews_type",
+      "label": "Reviews platform",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "judgeme",
+          "label": "Judge.me"
+        },
+        {
+          "value": "yotpo",
+          "label": "Yotpo"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "reviews_bg",
+      "label": "Reviews background",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "header",
+      "content": "Email Capture"
+    },
+    {
+      "type": "text",
+      "id": "email_title",
+      "label": "Email capture title",
+      "default": "Get ₹150 off your first order"
+    },
+    {
+      "type": "text",
+      "id": "email_subtitle",
+      "label": "Email capture subtitle",
+      "default": "Subscribe to our newsletter for exclusive offers and updates"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "email_button",
+      "label": "Email button text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "color",
+      "id": "email_bg",
+      "label": "Email section background",
+      "default": "#103948"
+    },
+    {
+      "type": "color",
+      "id": "email_text_color",
+      "label": "Email text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "SEO Content"
+    },
+    {
+      "type": "richtext",
+      "id": "seo_content",
+      "label": "SEO content",
+      "default": "<p>Discover the finest collection of men's clothing at our store. From premium jeans and trousers to stylish shirts, polos, and co-ords, we offer everything the modern Indian man needs. Our carefully curated selection features high-quality fabrics and contemporary designs perfect for every occasion. Shop with confidence knowing you get free shipping, easy returns, and cash on delivery options.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Styling"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary color (CTAs)",
+      "default": "#103948"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_text",
+      "label": "Primary button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "primary_hover_color",
+      "label": "Primary button hover color",
+      "default": "#0d2d3a"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_text",
+      "label": "Secondary button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_hover_text",
+      "label": "Secondary button hover text",
+      "default": "#103948"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#103948"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Badge color",
+      "default": "#e74c3c"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_spacing",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Section spacing",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_title_size",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Section title size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tile_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Tile border radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "input_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Input border radius",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Men's Hub"
+    }
+  ]
+}
+{% endschema %}

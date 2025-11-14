@@ -1,0 +1,623 @@
+{% doc %}
+  @prompt
+    create a section like this <div class="multi-teaser shop-trending-now touch-device active" style=" ">
+    <div class="multi-teaser-title">
+    <div style="
+    color:#222222!important ;font-size:23px;line-height:29px;text-align:left;letter-spacing:0px;font-family:NextDisplay-Bold !important;
+    ">
+    TRENDING NOW
+    </div>
+    </div>
+    <div class="multi-teaser-outer-container teaserWide-none teaser-stack ">
+    <div class="multi-teaser-inner-container">
+    <div id="multi-3-teaser-474844-4_item_0" class="multi-teaser-item">
+    <div class="layoutCls gutter-bt-teaser ">
+    <a aria-label="NEW: THIS WEEK Shop Now " data-module="multi-3-teaser-module " data-block="shop-trending-now" data-content-id="1299050" href="/shop/gender-women/feat-newin-latestarrivals-last7days" class="hp-hover-image-wrapper" title="NEW: THIS WEEK">
+    <div class=" portrait_ratio4x5-box ">
+    <img class="hp-tile-slider__img c-banner-tile__img img-responsive cm-image " data-cm-aspect-ratio="[{&quot;ratioWidth&quot;:800,&quot;ratioHeight&quot;:1000}]" alt="New: This Week" title="NEW: THIS WEEK" src="/cms/resource/blob/1299264/9952d72c1dd51ee20f3a15b6bd1d5979/13-10-25-trending-feature-1-womens-data.jpg">
+    </div>
+    <div class="hp-teaser-wrapper">
+    <h3 class="hp-tile-module-teaser__header" style="
+    color:#ffffff!important ;font-size:20px;text-align:left;letter-spacing:0px;font-family:NextDisplay-Bold !important;
+    ">
+    NEW: THIS WEEK
+    </h3>
+    </div>
+    </a>
+    </div> </div>
+    <div id="multi-3-teaser-474844-4_item_1" class="multi-teaser-item">
+    <div class="layoutCls gutter-bt-teaser ">
+    <a aria-label="TOP PICKS Shop Now " data-module="multi-3-teaser-module " data-block="shop-trending-now" data-content-id="1299052" href="/shop/promotion-octobertoppicks-0" class="hp-hover-image-wrapper" title="TOP PICKS">
+    <div class=" portrait_ratio4x5-box ">
+    <img class="hp-tile-slider__img c-banner-tile__img img-responsive cm-image " data-cm-aspect-ratio="[{&quot;ratioWidth&quot;:800,&quot;ratioHeight&quot;:1000}]" alt="Top Picks" title="TOP PICKS" src="/cms/resource/blob/1299262/adc99b13, i shall have the option for selecting which card to show
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-trending-section-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-trending-title-{{ ai_gen_id }} {
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    line-height: 1.3;
+    text-align: {{ block.settings.title_alignment }};
+    letter-spacing: 0px;
+    margin: 0 0 {{ block.settings.title_spacing }}px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .ai-trending-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-trending-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-trending-item-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-trending-link-{{ ai_gen_id }} {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .ai-trending-image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 125%;
+    overflow: hidden;
+    background-color: #f4f4f4;
+  }
+
+  .ai-trending-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-trending-link-{{ ai_gen_id }}:hover .ai-trending-image-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .ai-trending-content-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .ai-trending-item-title-{{ ai_gen_id }} {
+    color: {{ block.settings.item_title_color }};
+    font-size: {{ block.settings.item_title_size }}px;
+    text-align: {{ block.settings.item_title_alignment }};
+    letter-spacing: 0px;
+    margin: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .ai-trending-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-trending-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-trending-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-trending-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_tablet }}, 1fr);
+    }
+
+    .ai-trending-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.85 }}px;
+    }
+
+    .ai-trending-item-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.item_title_size | times: 0.9 }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-trending-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+    }
+
+    .ai-trending-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.75 }}px;
+    }
+
+    .ai-trending-item-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.item_title_size | times: 0.85 }}px;
+    }
+
+    .ai-trending-section-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.7 }}px 0 {{ block.settings.section_padding_bottom | times: 0.7 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-trending-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-trending-container-{{ ai_gen_id }}">
+    {% if block.settings.section_title != blank %}
+      <h2 class="ai-trending-title-{{ ai_gen_id }}">
+        {{ block.settings.section_title }}
+      </h2>
+    {% endif %}
+
+    <div class="ai-trending-grid-{{ ai_gen_id }}">
+      {% for i in (1..6) %}
+        {% liquid
+          assign show_key = 'show_item_' | append: i
+          assign collection_key = 'collection_' | append: i
+          assign title_key = 'item_title_' | append: i
+          assign image_key = 'item_image_' | append: i
+          
+          assign show_item = block.settings[show_key]
+          assign collection = block.settings[collection_key]
+          assign item_title = block.settings[title_key]
+          assign item_image = block.settings[image_key]
+        %}
+
+        {% if show_item %}
+          <div class="ai-trending-item-{{ ai_gen_id }}">
+            {% if collection != blank %}
+              <a 
+                href="{{ collection.url }}" 
+                class="ai-trending-link-{{ ai_gen_id }}"
+                aria-label="{{ item_title | default: collection.title }}"
+              >
+                <div class="ai-trending-image-wrapper-{{ ai_gen_id }}">
+                  {% if item_image != blank %}
+                    <img
+                      src="{{ item_image | image_url: width: 800 }}"
+                      alt="{{ item_title | default: collection.title | escape }}"
+                      class="ai-trending-image-{{ ai_gen_id }}"
+                      loading="lazy"
+                      width="800"
+                      height="1000"
+                    >
+                  {% elsif collection.image %}
+                    <img
+                      src="{{ collection.image | image_url: width: 800 }}"
+                      alt="{{ item_title | default: collection.title | escape }}"
+                      class="ai-trending-image-{{ ai_gen_id }}"
+                      loading="lazy"
+                      width="800"
+                      height="1000"
+                    >
+                  {% else %}
+                    <div class="ai-trending-placeholder-{{ ai_gen_id }}">
+                      {{ 'collection-1' | placeholder_svg_tag }}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="ai-trending-content-{{ ai_gen_id }}">
+                  <h3 class="ai-trending-item-title-{{ ai_gen_id }}">
+                    {{ item_title | default: collection.title }}
+                  </h3>
+                </div>
+              </a>
+            {% else %}
+              <div class="ai-trending-link-{{ ai_gen_id }}">
+                <div class="ai-trending-image-wrapper-{{ ai_gen_id }}">
+                  {% if item_image != blank %}
+                    <img
+                      src="{{ item_image | image_url: width: 800 }}"
+                      alt="{{ item_title | escape }}"
+                      class="ai-trending-image-{{ ai_gen_id }}"
+                      loading="lazy"
+                      width="800"
+                      height="1000"
+                    >
+                  {% else %}
+                    <div class="ai-trending-placeholder-{{ ai_gen_id }}">
+                      {{ 'collection-1' | placeholder_svg_tag }}
+                    </div>
+                  {% endif %}
+                  <div class="ai-trending-empty-state-{{ ai_gen_id }}">
+                    Next, select a collection
+                  </div>
+                </div>
+                {% if item_title != blank %}
+                  <div class="ai-trending-content-{{ ai_gen_id }}">
+                    <h3 class="ai-trending-item-title-{{ ai_gen_id }}">
+                      {{ item_title }}
+                    </h3>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trending now",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "TRENDING NOW"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#222222"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Size",
+      "default": 23
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom spacing",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on tablet",
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap between items",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Item style"
+    },
+    {
+      "type": "color",
+      "id": "item_title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "item_title_size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "item_title_alignment",
+      "label": "Title alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_1",
+      "label": "Show item 1",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "collection_1",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "item_title_1",
+      "label": "Custom title"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_1",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Item 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_2",
+      "label": "Show item 2",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "collection_2",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "item_title_2",
+      "label": "Custom title"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_2",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Item 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_3",
+      "label": "Show item 3",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "collection_3",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "item_title_3",
+      "label": "Custom title"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_3",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Item 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_4",
+      "label": "Show item 4",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "collection_4",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "item_title_4",
+      "label": "Custom title"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_4",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Item 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_5",
+      "label": "Show item 5",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "collection_5",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "item_title_5",
+      "label": "Custom title"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_5",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Item 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_6",
+      "label": "Show item 6",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "collection_6",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "item_title_6",
+      "label": "Custom title"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_image_6",
+      "label": "Custom image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trending now"
+    }
+  ]
+}
+{% endschema %}

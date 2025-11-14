@@ -1,0 +1,213 @@
+{% comment %} All Products Section {% endcomment %}
+
+<section class="products-section" data-section-id="{{ section.id }}">
+  <div class="products-container">
+    {% comment %} Section Header {% endcomment %}
+    <div class="section-header">
+      <h2 class="section-title">{{ section.settings.section_title }}</h2>
+      <p class="section-subtitle">{{ section.settings.section_subtitle }}</p>
+    </div>
+
+    {% comment %} Products Grid {% endcomment %}
+    <div class="products-grid products-per-row-{{ section.settings.products_per_row }}">
+      {% if section.settings.show_all_products %}
+        {% assign all_collection = collections['all'] %}
+
+        {% if all_collection and all_collection.products_count > 0 %}
+          {% for product in all_collection.products %}
+            <div class="product-card" data-product-id="{{ product.id }}" data-variant-id="{{ product.first_available_variant.id }}">
+              <div class="product-image-wrapper">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | img_url: '400x400' }}"
+                    alt="{{ product.featured_image.alt | default: product.title }}"
+                    class="product-image"
+                    loading="lazy"
+                    width="400"
+                    height="400"
+                  >
+                {% endif %}
+
+                {% comment %} Wishlist Heart Icon {% endcomment %}
+                <button class="wishlist-btn" aria-label="Add to wishlist">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
+
+                {% comment %} Rating Badge {% endcomment %}
+                <div class="rating-badge">
+                  <span class="star">★</span>
+                  <span class="rating">{{ product.metafields.reviews.rating | default: '4.2' }}</span>
+                  <span class="reviews">{{ product.metafields.reviews.rating_count | default: '413' }}</span>
+                </div>
+              </div>
+
+              {% comment %} Product Info {% endcomment %}
+              <div class="product-info">
+                <h3 class="product-title">{{ product.title }}</h3>
+
+                {% comment %} Pricing {% endcomment %}
+                <div class="pricing-section">
+                  <p class="coupon-text">
+                    ₹{{ product.price | money_without_currency }} Best price with coupon
+                  </p>
+                  <div class="price-row">
+                    {% if product.compare_at_price and product.compare_at_price > product.price %}
+                      <span class="original-price">
+                        ₹{{ product.compare_at_price | money_without_currency }}
+                      </span>
+                      {% assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+                      <span class="discount-badge">
+                        {{ discount | round }}% OFF
+                      </span>
+                    {% endif %}
+                    <span class="sale-price">
+                      ₹{{ product.price | money_without_currency }}
+                    </span>
+                  </div>
+                </div>
+
+                {% comment %} Delivery Info {% endcomment %}
+                {% if product.metafields.custom.delivery_date %}
+                  <p class="delivery-info">
+                    Delivery by {{ product.metafields.custom.delivery_date }}
+                  </p>
+                {% endif %}
+
+                {% comment %} Add to Cart Button {% endcomment %}
+                <button class="add-to-cart-btn" data-variant-id="{{ product.first_available_variant.id }}">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">
+            <p>No products available</p>
+          </div>
+        {% endif %}
+
+      {% else %}
+        {% if collection and collection.products_count > 0 %}
+          {% for product in collection.products %}
+            <div class="product-card" data-product-id="{{ product.id }}" data-variant-id="{{ product.first_available_variant.id }}">
+              <div class="product-image-wrapper">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | img_url: '400x400' }}"
+                    alt="{{ product.featured_image.alt | default: product.title }}"
+                    class="product-image"
+                    loading="lazy"
+                    width="400"
+                    height="400"
+                  >
+                {% endif %}
+
+                {% comment %} Wishlist Heart Icon {% endcomment %}
+                <button class="wishlist-btn" aria-label="Add to wishlist">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
+
+                {% comment %} Rating Badge {% endcomment %}
+                <div class="rating-badge">
+                  <span class="star">★</span>
+                  <span class="rating">{{ product.metafields.reviews.rating | default: '4.2' }}</span>
+                  <span class="reviews">{{ product.metafields.reviews.rating_count | default: '413' }}</span>
+                </div>
+              </div>
+
+              {% comment %} Product Info {% endcomment %}
+              <div class="product-info">
+                <h3 class="product-title">{{ product.title }}</h3>
+
+                {% comment %} Pricing {% endcomment %}
+                <div class="pricing-section">
+                  <p class="coupon-text">
+                    ₹{{ product.price | money_without_currency }} Best price with coupon
+                  </p>
+                  <div class="price-row">
+                    {% if product.compare_at_price and product.compare_at_price > product.price %}
+                      <span class="original-price">
+                        ₹{{ product.compare_at_price | money_without_currency }}
+                      </span>
+                      {% assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+                      <span class="discount-badge">
+                        {{ discount | round }}% OFF
+                      </span>
+                    {% endif %}
+                    <span class="sale-price">
+                      ₹{{ product.price | money_without_currency }}
+                    </span>
+                  </div>
+                </div>
+
+                {% comment %} Delivery Info {% endcomment %}
+                {% if product.metafields.custom.delivery_date %}
+                  <p class="delivery-info">
+                    Delivery by {{ product.metafields.custom.delivery_date }}
+                  </p>
+                {% endif %}
+
+                {% comment %} Add to Cart Button {% endcomment %}
+                <button class="add-to-cart-btn" data-variant-id="{{ product.first_available_variant.id }}">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">
+            <p>No products in this collection</p>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "All Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "All Products"
+    },
+    {
+      "type": "text",
+      "id": "section_subtitle",
+      "label": "Section Subtitle",
+      "default": "Browse our complete collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_products",
+      "label": "Show All Store Products (from 'All' collection)",
+      "default": false,
+      "info": "If unchecked, shows products from the current collection"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products Per Row (CSS helper class)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "All Products"
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'products-section.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'products-section.js' | asset_url }}" defer="defer"></script>
