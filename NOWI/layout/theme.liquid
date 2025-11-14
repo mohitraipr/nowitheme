@@ -1,38 +1,276 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
-    {% # Inlined CSS Variables %}
-    {% render 'css-variables' %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% if page_title %}{{ page_title | escape }}{% else %}{{ shop.name | escape }}{% endif %}</title>
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
 
-    {% comment %}
-      Font preloading:
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
-      3. Additional variants load on-demand via @font-face
-    {% endcomment %}
-    {% unless settings.type_primary_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-
-      {% comment %} Preload the base font variant for initial page render {% endcomment %}
-      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
-
-    {% # Load and preload the critical CSS %}
-    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
-
-    {% # Social, title, etc. %}
-    {% render 'meta-tags' %}
-
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
     {{ content_for_header }}
   </head>
+  <body class="template-{{ template | replace: '.', '-' }}" data-mobile-menu-state="closed">
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+    {% section 'announcement-bar' %}
+    {% section 'header' %}
 
-  <body class="template-{{ template.name | handle }}">
-    {% sections 'header-group' %}
+    <main id="MainContent" class="main-content" role="main">
+      {{ content_for_layout }}
+    </main>
 
-    {{ content_for_layout }}
+    {% section 'footer' %}
+    {% render 'cart-drawer' %}
 
-    {% sections 'footer-group' %}
+    <script>
+      (function () {
+        var moneyFormat = {{ shop.money_format | json }};
+        function formatMoney(cents) {
+          if (window.Shopify && Shopify.formatMoney) {
+            return Shopify.formatMoney(cents, moneyFormat);
+          }
+          return (cents / 100).toFixed(2);
+        }
 
+        var body = document.body;
+        var menuToggle = document.querySelector('[data-mobile-menu-toggle]');
+        var menuCloseButtons = document.querySelectorAll('[data-mobile-menu-close]');
+        var mobileMenu = document.querySelector('[data-mobile-menu]');
+        var searchToggle = document.querySelectorAll('[data-search-toggle]');
+        var searchPanel = document.querySelector('[data-search-panel]');
+        var cartDrawer = document.querySelector('[data-cart-drawer]');
+        var cartToggles = document.querySelectorAll('[data-cart-toggle]');
+        var cartClose = document.querySelectorAll('[data-cart-close]');
+        var filterToggle = document.querySelectorAll('[data-filter-toggle]');
+        var filterPanel = document.querySelector('[data-filter-panel]');
+        var filterClose = document.querySelectorAll('[data-filter-close]');
+
+        function trapFocus(container) {
+          if (!container) return;
+          var focusable = container.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
+          if (!focusable.length) return;
+          var first = focusable[0];
+          var last = focusable[focusable.length - 1];
+          container.addEventListener('keydown', function (event) {
+            if (event.key !== 'Tab') return;
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault();
+              last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault();
+              first.focus();
+            }
+          });
+          first.focus();
+        }
+
+        function openMenu() {
+          if (!mobileMenu) return;
+          mobileMenu.classList.add('is-open');
+          body.setAttribute('data-mobile-menu-state', 'open');
+          trapFocus(mobileMenu);
+        }
+
+        function closeMenu() {
+          if (!mobileMenu) return;
+          mobileMenu.classList.remove('is-open');
+          body.setAttribute('data-mobile-menu-state', 'closed');
+        }
+
+        if (menuToggle) {
+          menuToggle.addEventListener('click', function () {
+            if (mobileMenu && mobileMenu.classList.contains('is-open')) {
+              closeMenu();
+            } else {
+              openMenu();
+            }
+          });
+        }
+
+        menuCloseButtons.forEach(function (button) {
+          button.addEventListener('click', closeMenu);
+        });
+
+        if (mobileMenu) {
+          mobileMenu.addEventListener('click', function (event) {
+            if (event.target === mobileMenu) {
+              closeMenu();
+            }
+          });
+        }
+
+        searchToggle.forEach(function (toggle) {
+          toggle.addEventListener('click', function () {
+            if (!searchPanel) return;
+            var expanded = searchPanel.getAttribute('data-open') === 'true';
+            if (expanded) {
+              searchPanel.setAttribute('data-open', 'false');
+            } else {
+              searchPanel.setAttribute('data-open', 'true');
+              var input = searchPanel.querySelector('input[type="search"]');
+              if (input) {
+                window.setTimeout(function () { input.focus(); }, 120);
+              }
+            }
+          });
+        });
+
+        function openCartDrawer() {
+          if (!cartDrawer) return;
+          cartDrawer.setAttribute('data-open', 'true');
+          body.classList.add('cart-drawer-open');
+          trapFocus(cartDrawer);
+        }
+
+        function closeCartDrawer() {
+          if (!cartDrawer) return;
+          cartDrawer.setAttribute('data-open', 'false');
+          body.classList.remove('cart-drawer-open');
+        }
+
+        cartToggles.forEach(function (toggle) {
+          toggle.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (cartDrawer && cartDrawer.getAttribute('data-open') === 'true') {
+              closeCartDrawer();
+            } else {
+              openCartDrawer();
+            }
+          });
+        });
+
+        cartClose.forEach(function (button) {
+          button.addEventListener('click', function (event) {
+            event.preventDefault();
+            closeCartDrawer();
+          });
+        });
+
+        if (cartDrawer) {
+          cartDrawer.addEventListener('click', function (event) {
+            if (event.target === cartDrawer) {
+              closeCartDrawer();
+            }
+          });
+        }
+
+        filterToggle.forEach(function (toggle) {
+          toggle.addEventListener('click', function () {
+            if (!filterPanel) return;
+            var open = filterPanel.getAttribute('data-open') === 'true';
+            filterPanel.setAttribute('data-open', open ? 'false' : 'true');
+            if (!open) {
+              trapFocus(filterPanel);
+            }
+          });
+        });
+
+        filterClose.forEach(function (button) {
+          button.addEventListener('click', function () {
+            if (!filterPanel) return;
+            filterPanel.setAttribute('data-open', 'false');
+          });
+        });
+
+        var productDataElements = document.querySelectorAll('[data-product-json]');
+        productDataElements.forEach(function (dataEl) {
+          try {
+            var productData = JSON.parse(dataEl.textContent);
+          } catch (error) {
+            return;
+          }
+          var container = dataEl.closest('.product');
+          if (!container) return;
+          var form = container.querySelector('.product-form');
+          if (!form) return;
+          var variantInput = form.querySelector('input[name="id"]');
+          var addButton = form.querySelector('button[name="add"]');
+          var priceWrapper = container.querySelector('.product-price');
+          var priceEl = priceWrapper ? priceWrapper.querySelector('span') : null;
+          var compareEl = priceWrapper ? priceWrapper.querySelector('s') : null;
+          var badgeEl = priceWrapper ? priceWrapper.querySelector('.pill') : null;
+
+          function setActiveStyles() {
+            var labels = form.querySelectorAll('.variant-option');
+            labels.forEach(function (label) { label.classList.remove('is-active'); });
+            var checkedRadios = form.querySelectorAll('input[type="radio"]:checked');
+            checkedRadios.forEach(function (radio) {
+              if (!radio.name || radio.name.indexOf('options[') !== 0) return;
+              var label = form.querySelector('label[for="' + radio.id + '"]');
+              if (label) {
+                label.classList.add('is-active');
+              }
+            });
+          }
+
+          function updateVariant() {
+            var selectedOptions = [];
+            productData.options.forEach(function (option, index) {
+              var selector = 'input[name="options[' + option.name + ']"]:checked';
+              var selected = form.querySelector(selector);
+              selectedOptions[index] = selected ? selected.value : null;
+            });
+
+            var matchedVariant = productData.variants.find(function (variant) {
+              return variant.options.every(function (value, index) {
+                return value === selectedOptions[index];
+              });
+            });
+
+            if (!matchedVariant) {
+              return;
+            }
+
+            if (variantInput) {
+              variantInput.value = matchedVariant.id;
+            }
+
+            if (addButton) {
+              addButton.disabled = !matchedVariant.available;
+              if (matchedVariant.available) {
+                addButton.textContent = addButton.getAttribute('data-available-label') || addButton.textContent;
+              } else {
+                addButton.textContent = addButton.getAttribute('data-sold-out-label') || addButton.textContent;
+              }
+            }
+
+            if (priceEl) {
+              priceEl.textContent = formatMoney(matchedVariant.price);
+            }
+
+            if (compareEl && badgeEl) {
+              if (matchedVariant.compare_at_price > matchedVariant.price) {
+                compareEl.textContent = formatMoney(matchedVariant.compare_at_price);
+                compareEl.style.display = '';
+                var discount = Math.round((matchedVariant.compare_at_price - matchedVariant.price) / matchedVariant.compare_at_price * 100);
+                badgeEl.textContent = '-' + discount + '%';
+                badgeEl.style.display = '';
+              } else {
+                compareEl.style.display = 'none';
+                badgeEl.style.display = 'none';
+              }
+            }
+          }
+
+          var optionInputs = form.querySelectorAll('input[type="radio"]');
+          optionInputs.forEach(function (input) {
+            if (!input.name || input.name.indexOf('options[') !== 0) return;
+            input.addEventListener('change', function () {
+              setActiveStyles();
+              updateVariant();
+            });
+          });
+
+          setActiveStyles();
+          updateVariant();
+        });
+      })();
+    </script>
     {{ content_for_footer }}
   </body>
 </html>

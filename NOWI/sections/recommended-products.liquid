@@ -1,49 +1,67 @@
-{% if recommendations.performed and recommendations.products_count > 0 %}
-  <section class="recommended-products">
-    <div class="home-section-heading">
-      {% if section.settings.subheading != blank %}
-        <p class="home-section-eyebrow">{{ section.settings.subheading | escape }}</p>
-      {% endif %}
-      <h2>{{ section.settings.heading | escape }}</h2>
-      {% if section.settings.body != blank %}
-        <p class="home-section-body">{{ section.settings.body | escape }}</p>
-      {% endif %}
-    </div>
-    <div class="recommended-products__grid">
-      {% for product in recommendations.products %}
-        {% render 'product-card', card_product: product %}
-      {% endfor %}
-    </div>
-  </section>
-{% endif %}
+{% liquid
+  assign use_recommendations = section.settings.source == 'recommendations' and product
+  assign featured_collection = collections[section.settings.collection]
+%}
 
-<style>
-  .recommended-products {
-    padding: 3rem var(--page-margin);
-    display: grid;
-    gap: 2rem;
-  }
-  .recommended-products__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-  @media (min-width: 768px) {
-    .recommended-products__grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-</style>
+<section class="section section--recommended">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <div class="section-heading">{{ section.settings.heading | escape }}</div>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p class="section-subheading">{{ section.settings.subheading | escape }}</p>
+    {% endif %}
+
+    <div class="collection-grid-products">
+      {% if use_recommendations %}
+        {% if recommendations.performed and recommendations.products_count > 0 %}
+          {% for product in recommendations.products | limit: section.settings.product_limit %}
+            {% render 'product-card', product: product %}
+          {% endfor %}
+        {% else %}
+          <product-recommendations
+            data-section-id="{{ section.id }}"
+            data-product-id="{{ product.id }}"
+            data-limit="{{ section.settings.product_limit }}">
+          </product-recommendations>
+        {% endif %}
+      {% elsif featured_collection %}
+        {% for product in featured_collection.products | limit: section.settings.product_limit %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      {% else %}
+        {% for i in (1..4) %}
+          <article class="product-card">
+            <div class="product-card__media">{{ 'product-' | append: i | placeholder_svg_tag }}</div>
+            <div class="product-card__content">
+              <div class="product-card__title">Essential Layer {{ i }}</div>
+            </div>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
   "name": "Recommended products",
   "settings": [
     {
-      "type": "text",
-      "id": "subheading",
-      "label": "Eyebrow text",
-      "default": "Styled just for you"
+      "type": "select",
+      "id": "source",
+      "label": "Product source",
+      "options": [
+        { "value": "recommendations", "label": "Dynamic recommendations" },
+        { "value": "collection", "label": "Manual collection" }
+      ],
+      "default": "recommendations"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Used when source is set to manual collection."
     },
     {
       "type": "text",
@@ -53,14 +71,20 @@
     },
     {
       "type": "textarea",
-      "id": "body",
-      "label": "Supporting text",
-      "default": "Complete your look with these curated picks."
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Handpicked styles to complete your look."
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Products to show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
     }
   ],
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
   "presets": [
     {
       "name": "Recommended products"

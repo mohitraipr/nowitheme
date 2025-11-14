@@ -1,100 +1,13 @@
-{% if section.settings.enable_bar %}
-  <div class="announcement-bar" role="region" aria-label="{{ section.settings.label | escape }}" data-announcement-bar>
-    <div class="announcement-bar__content">
-      <div class="announcement-bar__message">
-        {{ section.settings.message | escape }}
-        {% if section.settings.subtext != blank %}
-          <span class="announcement-bar__subtext">{{ section.settings.subtext | escape }}</span>
-        {% endif %}
-      </div>
-      {% if section.settings.link_text != blank and section.settings.link_url != blank %}
-        <a class="announcement-bar__link" href="{{ section.settings.link_url }}">{{ section.settings.link_text | escape }}</a>
-      {% endif %}
-      {% if section.settings.show_dismiss %}
-        <button type="button" class="announcement-bar__close" data-announcement-dismiss aria-label="{{ 'general.accessibility.close' | t }}">
-          &times;
-        </button>
+{% if section.settings.enable_bar and section.settings.text != blank %}
+  <section class="announcement-bar" style="--announcement-bg: {{ section.settings.background | color_to_rgb | join: ',' }}; --announcement-text: {{ section.settings.text_color | color_to_rgb | join: ',' }};">
+    <div class="announcement-bar__inner" role="status">
+      {% if section.settings.link != blank %}
+        <a href="{{ section.settings.link }}" class="announcement-bar__link">{{ section.settings.text | escape }}</a>
+      {% else %}
+        <span>{{ section.settings.text | escape }}</span>
       {% endif %}
     </div>
-  </div>
-{% endif %}
-
-<style>
-  .announcement-bar {
-    background: {{ section.settings.background | default: '#111111' }};
-    color: {{ section.settings.text_color | default: '#ffffff' }};
-    padding: 0.5rem var(--page-margin);
-  }
-  .announcement-bar__content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    text-align: center;
-    font-size: 0.875rem;
-  }
-  .announcement-bar__message {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .announcement-bar__subtext {
-    font-size: 0.75rem;
-    opacity: 0.85;
-  }
-  .announcement-bar__link {
-    color: inherit;
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-  .announcement-bar__close {
-    background: none;
-    border: 0;
-    color: inherit;
-    font-size: 1.25rem;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  @media (min-width: 768px) {
-    .announcement-bar__content {
-      justify-content: space-between;
-    }
-    .announcement-bar__message {
-      flex-direction: row;
-      gap: 0.75rem;
-    }
-    .announcement-bar__subtext {
-      font-size: 0.875rem;
-    }
-  }
-</style>
-
-{% if section.settings.show_dismiss %}
-  <script>
-    (function () {
-      var bar = document.querySelector('[data-announcement-bar]');
-      if (!bar) return;
-      var close = bar.querySelector('[data-announcement-dismiss]');
-      if (!close) return;
-      var storageKey = 'announcement-bar-' + {{ section.id | json }};
-      try {
-        if (sessionStorage.getItem(storageKey)) {
-          bar.style.display = 'none';
-          return;
-        }
-      } catch (error) {
-        console.warn('Announcement bar storage unavailable');
-      }
-      close.addEventListener('click', function () {
-        bar.style.display = 'none';
-        try {
-          sessionStorage.setItem(storageKey, 'hidden');
-        } catch (error) {}
-      });
-    })();
-  </script>
+  </section>
 {% endif %}
 
 {% schema %}
@@ -104,55 +17,31 @@
     {
       "type": "checkbox",
       "id": "enable_bar",
-      "default": true,
-      "label": "Show announcement bar"
+      "label": "Show announcement bar",
+      "default": true
     },
     {
       "type": "text",
-      "id": "label",
-      "label": "Accessibility label",
-      "default": "Store announcement"
-    },
-    {
-      "type": "text",
-      "id": "message",
-      "label": "Primary message",
-      "default": "Free shipping on orders above Rs. 1999"
-    },
-    {
-      "type": "text",
-      "id": "subtext",
-      "label": "Secondary message",
-      "default": "Buy 2 pairs and get 10% off"
-    },
-    {
-      "type": "text",
-      "id": "link_text",
-      "label": "Link text",
-      "default": "Shop offers"
+      "id": "text",
+      "label": "Message",
+      "default": "Free shipping on all orders above ₹999"
     },
     {
       "type": "url",
-      "id": "link_url",
-      "label": "Link URL"
+      "id": "link",
+      "label": "Link"
     },
     {
       "type": "color",
       "id": "background",
       "label": "Background color",
-      "default": "#111111"
+      "default": "#0f172a"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "Text color",
       "default": "#ffffff"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_dismiss",
-      "label": "Allow customers to hide the bar",
-      "default": true
     }
   ],
   "presets": [

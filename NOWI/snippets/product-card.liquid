@@ -1,53 +1,41 @@
 {% liquid
-  assign card_product = product | default: card_product
-  assign show_vendor = show_vendor | default: false
-  assign sale = false
-  assign discount = 0
-  if card_product and card_product.compare_at_price > card_product.price
-    assign sale = true
-    assign discount = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price | round
+  assign item = product
+  assign on_sale = item.compare_at_price_max > item.price
+  assign new_badge = false
+  if item.tags contains 'new' or item.tags contains 'New'
+    assign new_badge = true
+  endif
+  assign bestseller_badge = false
+  if item.tags contains 'bestseller' or item.tags contains 'Bestseller'
+    assign bestseller_badge = true
   endif
 %}
 
-{% if card_product %}
-  <article class="product-card">
-    <a class="product-card__media" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
-      {% if card_product.featured_image %}
-        <img
-          src="{{ card_product.featured_image | image_url: width: 600 }}"
-          srcset="{{ card_product.featured_image | image_url: width: 400 }} 400w, {{ card_product.featured_image | image_url: width: 600 }} 600w, {{ card_product.featured_image | image_url: width: 800 }} 800w"
-          sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
-          alt="{{ card_product.featured_image.alt | default: card_product.title | escape }}"
-          loading="lazy"
-        >
-      {% else %}
-        <div class="product-card__placeholder">{{ 'products.product.product_image_missing' | t }}</div>
+<article class="product-card" data-product-card>
+  <a href="{{ item.url }}" class="product-card__media">
+    {% if new_badge %}
+      <span class="badge product-card__badge">{{ 'products.product.new' | t }}</span>
+    {% endif %}
+    {% if on_sale %}
+      <span class="badge product-card__discount">-{{ item.compare_at_price_max | minus: item.price | times: 100 | divided_by: item.compare_at_price_max | round }}%</span>
+    {% endif %}
+    {% if item.featured_media %}
+      {% assign media_alt = item.featured_media.alt | default: item.title | escape %}
+      {{ item.featured_media | image_url: width: 800 | image_tag: alt: media_alt, loading: 'lazy' }}
+    {% else %}
+      {{ 'product-1' | placeholder_svg_tag }}
+    {% endif %}
+  </a>
+  <div class="product-card__content">
+    <a href="{{ item.url }}" class="product-card__title">{{ item.title | escape }}</a>
+    {% if bestseller_badge %}
+      <span class="pill">Bestseller</span>
+    {% endif %}
+    <div class="product-card__price">
+      <span>{{ item.price | money }}</span>
+      {% if on_sale %}
+        <s>{{ item.compare_at_price_max | money }}</s>
       {% endif %}
-      <div class="product-card__badges">
-        {% if sale %}
-          <span class="product-card__badge product-card__badge--sale">-{{ discount }}%</span>
-        {% endif %}
-        {% if card_product.tags contains 'New' or card_product.tags contains 'new' %}
-          <span class="product-card__badge">{{ 'products.product.new' | t }}</span>
-        {% endif %}
-        {% if card_product.tags contains 'Bestseller' or card_product.tags contains 'bestseller' %}
-          <span class="product-card__badge">{{ 'products.product.best_seller' | t }}</span>
-        {% endif %}
-      </div>
-    </a>
-    <div class="product-card__info">
-      <h3 class="product-card__title">
-        <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
-      </h3>
-      {% if show_vendor and card_product.vendor %}
-        <p class="product-card__vendor">{{ card_product.vendor | escape }}</p>
-      {% endif %}
-      <div class="product-card__pricing">
-        <span class="product-card__price">{{ card_product.price | money }}</span>
-        {% if sale %}
-          <span class="product-card__compare">{{ card_product.compare_at_price | money }}</span>
-        {% endif %}
-      </div>
     </div>
-  </article>
-{% endif %}
+  </div>
+</article>

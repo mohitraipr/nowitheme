@@ -1,0 +1,105 @@
+<section class="contact-page">
+  <div class="container">
+    <h1 class="section-heading">{{ section.settings.heading | default: page.title | escape }}</h1>
+    <p class="section-subheading">{{ section.settings.subheading | escape }}</p>
+    <div class="contact-grid">
+      <div class="contact-form">
+        {% form 'contact' %}
+          <div>
+            <label for="ContactName">{{ 'contact.form.name' | t }}</label>
+            <input id="ContactName" type="text" name="contact[name]" value="{{ form.name }}" required>
+          </div>
+          <div>
+            <label for="ContactEmail">{{ 'contact.form.email' | t }}</label>
+            <input id="ContactEmail" type="email" name="contact[email]" value="{{ form.email }}" required>
+          </div>
+          <div>
+            <label for="ContactPhone">{{ 'contact.form.phone' | t }}</label>
+            <input id="ContactPhone" type="tel" name="contact[phone]" value="{{ form.phone }}">
+          </div>
+          <div>
+            <label for="ContactMessage">{{ 'contact.form.message' | t }}</label>
+            <textarea id="ContactMessage" name="contact[body]" rows="5" required>{{ form.body }}</textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">{{ 'contact.form.send' | t }}</button>
+          {% if form.posted_successfully? %}
+            <p class="form-success" role="status">{{ 'contact.form.post_success' | t }}</p>
+          {% endif %}
+          {% if form.errors %}
+            <div class="form-error" role="alert">{{ form.errors | default_errors }}</div>
+          {% endif %}
+        {% endform %}
+      </div>
+      <div class="contact-info card">
+        <h2>{{ section.settings.info_heading | escape }}</h2>
+        <p>{{ section.settings.info_text | escape }}</p>
+        <ul class="contact-list">
+          {% if section.settings.email != blank %}
+            <li><strong>Email</strong><a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></li>
+          {% endif %}
+          {% if section.settings.phone != blank %}
+            <li><strong>Phone</strong><a href="tel:{{ section.settings.phone }}">{{ section.settings.phone }}</a></li>
+          {% endif %}
+          {% if section.settings.address != blank %}
+            <li><strong>Studio</strong><span>{{ section.settings.address | escape }}</span></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Talk to the NOWI concierge"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We’re here for fit advice, drop alerts and bespoke styling."
+    },
+    {
+      "type": "text",
+      "id": "info_heading",
+      "label": "Info heading",
+      "default": "Visit us"
+    },
+    {
+      "type": "textarea",
+      "id": "info_text",
+      "label": "Info text",
+      "default": "Our studio is open Monday to Saturday, 11am – 7pm IST."
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "support@nowi.in"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "+91 98765 43210"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address",
+      "default": "12 Residency Road, Bengaluru 560025"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact"
+    }
+  ]
+}
+{% endschema %}

@@ -1,70 +1,47 @@
-{% comment %}
-  This section is used in the search template to render search results for
-  products, articles, and pages.
+<section class="search-template">
+  <div class="container">
+    <h1 class="section-heading">{{ 'search.title' | t }}</h1>
+    <form class="search-template__form" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="SearchInputTemplate">{{ 'general.search.search' | t }}</label>
+      <input id="SearchInputTemplate" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}">
+      <button class="btn btn-primary" type="submit">{{ 'search.submit' | t }}</button>
+    </form>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/search
-{% endcomment %}
-
-<h1>{{ 'search.title' | t }}</h1>
-
-<form action="{{ routes.search_url }}" method="get" role="search">
-  <input
-    type="search"
-    size="50"
-    name="q"
-    value="{{ search.terms | escape }}"
-    placeholder="{{ 'search.placeholder' | t }}"
-  >
-  <button type="submit">{{ 'search.submit' | t }}</button>
-</form>
-
-{% if search.performed %}
-  {% if search.results_count == 0 %}
-    <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-  {% else %}
-    <p>{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
-
-    <div class="search-results">
-      {% paginate search.results by 20 %}
-        {% # Search result items may be an article, a page, or a product. %}
-        {% for result in search.results %}
-          <div class="search-result">
-            {% assign featured_image = result.featured_image | default: result.image %}
-            {% if featured_image %}
-              {% render 'image', class: 'search-result__image', image: featured_image, url: result.url, width: 400 %}
-            {% endif %}
-            <div class="search-result__content">
-              <p>
-                {{ result.title | link_to: result.url }}
-                {% if result.price %}
-                  {{ result.price | money_with_currency }}
-                {% endif %}
-              </p>
-            </div>
-          </div>
-        {% endfor %}
-
-        {{ paginate | default_pagination }}
-      {% endpaginate %}
-    </div>
-  {% endif %}
-{% endif %}
-
-{% stylesheet %}
-  .search-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  .search-results .prev,
-  .search-results .page,
-  .search-results .next {
-    grid-column: 1 / -1;
-  }
-{% endstylesheet %}
+    {% if search.performed %}
+      {% if search.results_count == 0 %}
+        <div class="card search-empty">
+          <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
+        </div>
+      {% else %}
+        <p class="section-subheading search-results-count">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+        <div class="collection-grid-products">
+          {% paginate search.results by 24 %}
+            {% for result in search.results %}
+              {% if result.object_type == 'product' %}
+                {% render 'product-card', product: result %}
+              {% else %}
+                <article class="card search-article">
+                  <h2>{{ result.title | link_to: result.url }}</h2>
+                  {% if result.object_type == 'article' %}
+                    <p class="section-subheading">{{ result.published_at | date: format: 'abbreviated_date' }}</p>
+                  {% endif %}
+                  {% if result.excerpt != blank %}
+                    <p>{{ result.excerpt | strip_html | truncate: 120 }}</p>
+                  {% endif %}
+                </article>
+              {% endif %}
+            {% endfor %}
+            <div class="search-pagination">{{ paginate | default_pagination }}</div>
+          {% endpaginate %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "t:general.search",
+  "name": "Search",
   "settings": []
 }
 {% endschema %}

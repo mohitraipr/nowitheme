@@ -1,15 +1,33 @@
-<div class="trust-badges">
-  {% for badge in badges %}
-    <div class="trust-badges__item">
-      {% if badge.icon != blank %}
-        <span class="trust-badges__icon">{{ badge.icon }}</span>
+{% liquid
+  assign items = badges
+  if items == blank and badge_items != blank
+    assign items = badge_items
+  endif
+%}
+
+{% if items and items.size > 0 %}
+  <div class="trust-badges" role="list">
+    {% for badge in items %}
+      {% if badge.settings %}
+        {% assign icon = badge.settings.icon %}
+        {% assign title = badge.settings.title %}
+        {% assign text = badge.settings.text %}
+      {% else %}
+        {% assign icon = badge.icon %}
+        {% assign title = badge.title %}
+        {% assign text = badge.text %}
       {% endif %}
-      <div class="trust-badges__content">
-        <p class="trust-badges__title">{{ badge.title }}</p>
-        {% if badge.text %}
-          <p class="trust-badges__text">{{ badge.text }}</p>
+      <div class="trust-badge" role="listitem">
+        {% if icon != blank %}
+          <div class="trust-badge__icon" aria-hidden="true">{{ icon }}</div>
+        {% endif %}
+        {% if title != blank %}
+          <div class="trust-badge__title">{{ title }}</div>
+        {% endif %}
+        {% if text != blank %}
+          <p class="trust-badge__text">{{ text }}</p>
         {% endif %}
       </div>
-    </div>
-  {% endfor %}
-</div>
+    {% endfor %}
+  </div>
+{% endif %}
