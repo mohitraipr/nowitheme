@@ -1,0 +1,99 @@
+<section class="home-promo-strip full-width">
+  <div class="home-promo-strip__inner">
+    {% if section.blocks.size > 0 %}
+      {% for block in section.blocks %}
+        <div class="home-promo-strip__item" {{ block.shopify_attributes }}>
+          <p class="home-promo-strip__title">{{ block.settings.title | escape }}</p>
+          {% if block.settings.text != blank %}
+            <p class="home-promo-strip__text">{{ block.settings.text | escape }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="home-promo-strip__item">{{ section.settings.fallback_text | escape }}</div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .home-promo-strip {
+    padding: 1.25rem var(--page-margin);
+    background: #111;
+    color: #fff;
+  }
+  .home-promo-strip__inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .home-promo-strip__item {
+    text-align: center;
+  }
+  .home-promo-strip__title {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .home-promo-strip__text {
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+
+  @media (min-width: 768px) {
+    .home-promo-strip__inner {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      text-align: center;
+    }
+    .home-promo-strip__item {
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      padding-right: 1.5rem;
+    }
+    .home-promo-strip__item:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Promo strip",
+  "settings": [
+    {
+      "type": "text",
+      "id": "fallback_text",
+      "label": "Fallback message",
+      "default": "Free shipping above Rs. 1999"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promo",
+      "name": "Promo",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free shipping above Rs. 1999"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "COD available across India"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Promo strip",
+      "blocks": [
+        { "type": "promo" },
+        { "type": "promo" },
+        { "type": "promo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

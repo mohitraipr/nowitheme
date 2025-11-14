@@ -1,47 +1,282 @@
-{% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
+<section class="collection">
+  <header class="collection__header">
+    <div class="collection__titles">
+      <h1>{{ collection.title | escape }}</h1>
+      {% if collection.description != blank %}
+        <div class="collection__description">{{ collection.description }}</div>
+      {% endif %}
+    </div>
+    <div class="collection__controls">
+      {% if collection.filters.size > 0 %}
+        <button class="collection__filter-toggle" data-filter-toggle type="button">{{ section.settings.filter_button_label | escape }}</button>
+      {% endif %}
+      <form class="collection__sort" method="get" action="{{ collection.url }}">
+        <label for="SortBy-{{ section.id }}">{{ section.settings.sort_label | escape }}</label>
+        <select id="SortBy-{{ section.id }}" name="sort_by" onchange="this.form.submit()">
+          {% for option in collection.sort_options %}
+            <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+          {% endfor %}
+        </select>
+        {% for filter in collection.filters %}
+          {% for value in filter.active_values %}
+            <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+          {% endfor %}
+          {% if filter.type == 'price_range' %}
+            {% if filter.min_value.value %}
+              <input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}">
+            {% endif %}
+            {% if filter.max_value.value %}
+              <input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}">
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </form>
+    </div>
+  </header>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
-{% endcomment %}
-
-<h1>{{ collection.title }}</h1>
-
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
+  <div class="collection__layout">
+    {% if collection.filters.size > 0 %}
+      <aside class="collection__filters" data-filter-panel>
+        {% render 'collection-filters', collection: collection, section: section %}
+      </aside>
+    {% endif %}
+    <div class="collection__products">
+      {% paginate collection.products by section.settings.products_per_page %}
+        {% if collection.products_count > 0 %}
+          <div class="collection__grid">
+            {% for product in collection.products %}
+              {% render 'product-card', card_product: product, show_vendor: section.settings.show_vendor %}
+            {% endfor %}
+          </div>
+        {% else %}
+          <p>{{ 'collections.general.no_matches' | t }}</p>
         {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
+        <div class="collection__pagination">{{ paginate | default_pagination }}</div>
+      {% endpaginate %}
+    </div>
+  </div>
+
+  {% if collection.filters.size > 0 %}
+    <dialog class="collection__filter-dialog" id="CollectionFilter-{{ section.id }}">
+      <div class="collection__filter-dialog-inner">
+        <div class="collection__filter-dialog-header">
+          <h2>{{ section.settings.filter_dialog_heading | escape }}</h2>
+          <button type="button" data-filter-close aria-label="{{ 'general.accessibility.close' | t }}">&times;</button>
         </div>
+        {% render 'collection-filters', collection: collection, section: section, is_dialog: true %}
       </div>
-    {% endfor %}
+    </dialog>
+  {% endif %}
+</section>
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
-</div>
-
-{% stylesheet %}
-  .collection-products {
+<style>
+  .collection {
+    padding: 2rem var(--page-margin) 4rem;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 2rem;
   }
-{% endstylesheet %}
+  .collection__header {
+    display: grid;
+    gap: 1rem;
+  }
+  .collection__description {
+    color: rgba(17, 17, 17, 0.75);
+    max-width: 60ch;
+  }
+  .collection__titles h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .collection__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .collection__filter-toggle {
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: #fff;
+    font-weight: 600;
+  }
+  .collection__sort {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .collection__sort select {
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+  }
+  .collection__layout {
+    display: grid;
+    gap: 2rem;
+  }
+  .collection__filters {
+    display: none;
+  }
+  .collection__products {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .collection__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .collection__pagination {
+    display: flex;
+    justify-content: center;
+  }
+  .collection__filter-dialog {
+    border: none;
+    max-width: 420px;
+    width: calc(100% - 2rem);
+    padding: 0;
+    border-radius: 1.5rem;
+  }
+  .collection__filter-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+  }
+  .collection__filter-dialog-inner {
+    padding: 1.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .collection__filter-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .collection__filter-dialog-header button {
+    font-size: 1.5rem;
+    border: none;
+    background: none;
+  }
+
+  @media (min-width: 992px) {
+    .collection__layout {
+      grid-template-columns: 280px 1fr;
+    }
+    .collection__filters {
+      display: block;
+      position: sticky;
+      top: 6rem;
+      align-self: start;
+    }
+    .collection__filter-toggle {
+      display: none;
+    }
+    .collection__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1200px) {
+    .collection__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var filterToggle = document.querySelector('[data-filter-toggle]');
+    var dialog = document.getElementById('CollectionFilter-{{ section.id }}');
+    if (!filterToggle || !dialog) return;
+    var closeButton = dialog.querySelector('[data-filter-close]');
+    function openDialog() {
+      if (typeof dialog.showModal === 'function') {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute('open', 'open');
+      }
+    }
+    function closeDialog() {
+      if (typeof dialog.close === 'function') {
+        dialog.close();
+      } else {
+        dialog.removeAttribute('open');
+      }
+    }
+    filterToggle.addEventListener('click', openDialog);
+    if (closeButton) {
+      closeButton.addEventListener('click', closeDialog);
+    }
+    dialog.addEventListener('click', function (event) {
+      if (event.target === dialog) {
+        closeDialog();
+      }
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeDialog();
+      }
+    });
+  })();
+</script>
 
 {% schema %}
 {
-  "name": "t:general.collection",
-  "settings": []
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "default": 12,
+      "min": 4,
+      "max": 24,
+      "step": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "filter_button_label",
+      "label": "Filter button label",
+      "default": "Filter"
+    },
+    {
+      "type": "text",
+      "id": "sort_label",
+      "label": "Sort label",
+      "default": "Sort by"
+    },
+    {
+      "type": "text",
+      "id": "filter_dialog_heading",
+      "label": "Filter dialog heading",
+      "default": "Filter & refine"
+    },
+    {
+      "type": "text",
+      "id": "filter_apply_label",
+      "label": "Apply filters label",
+      "default": "Apply filters"
+    },
+    {
+      "type": "text",
+      "id": "filter_clear_label",
+      "label": "Clear filters label",
+      "default": "Clear all"
+    },
+    {
+      "type": "text",
+      "id": "filter_price_from_label",
+      "label": "Price from label",
+      "default": "From"
+    },
+    {
+      "type": "text",
+      "id": "filter_price_to_label",
+      "label": "Price to label",
+      "default": "To"
+    }
+  ]
 }
 {% endschema %}

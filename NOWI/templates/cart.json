@@ -1,17 +1,17 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "cart",
-      "settings": {}
+      "settings": {
+        "empty_cta_label": "Shop new arrivals",
+        "summary_heading": "Order summary",
+        "summary_note": "Shipping and taxes calculated at checkout.",
+        "enable_order_note": true,
+        "order_note_label": "Add a note for our team",
+        "continue_shopping_label": "Continue shopping",
+        "empty_cta_link": "shopify://collections/all",
+        "continue_shopping_link": "shopify://collections/all"
+      }
     }
   },
   "order": [

@@ -1,0 +1,206 @@
+<section class="home-featured-collections">
+  <div class="home-section-heading">
+    {% if section.settings.subheading != blank %}
+      <p class="home-section-eyebrow">{{ section.settings.subheading | escape }}</p>
+    {% endif %}
+    <div class="home-section-heading__row">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <a class="home-section-heading__cta" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}</a>
+      {% endif %}
+    </div>
+    {% if section.settings.body != blank %}
+      <p class="home-section-body">{{ section.settings.body | escape }}</p>
+    {% endif %}
+  </div>
+
+  <div class="home-featured-collections__grid">
+    {% for block in section.blocks %}
+      {% assign collection = block.settings.collection %}
+      <article class="collection-tile" {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.link | default: collection.url }}" class="collection-tile__link">
+          <div class="collection-tile__media">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | default: collection.title | escape }}" loading="lazy">
+            {% elsif collection and collection.image %}
+              <img src="{{ collection.image | image_url: width: 800 }}" alt="{{ collection.image.alt | default: collection.title | escape }}" loading="lazy">
+            {% else %}
+              <div class="collection-tile__placeholder">{{ 'collections.general.no_matches' | t }}</div>
+            {% endif %}
+          </div>
+          <div class="collection-tile__content">
+            <h3>{{ block.settings.heading | default: collection.title | escape }}</h3>
+            {% if block.settings.caption != blank %}
+              <p>{{ block.settings.caption | escape }}</p>
+            {% elsif collection and collection.description != blank %}
+              <p>{{ collection.description | strip_html | truncate: 80 }}</p>
+            {% endif %}
+          </div>
+        </a>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .home-featured-collections {
+    padding: 3rem var(--page-margin);
+    display: grid;
+    gap: 2rem;
+  }
+  .home-section-heading {
+    display: grid;
+    gap: 0.75rem;
+    text-align: left;
+  }
+  .home-section-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+    color: rgba(17, 17, 17, 0.65);
+  }
+  .home-section-heading__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .home-section-heading__row h2 {
+    font-size: 1.75rem;
+  }
+  .home-section-heading__cta {
+    text-decoration: none;
+    font-weight: 600;
+    color: #111;
+  }
+  .home-section-body {
+    color: rgba(17, 17, 17, 0.8);
+  }
+  .home-featured-collections__grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+  .collection-tile {
+    border-radius: 1.25rem;
+    overflow: hidden;
+    position: relative;
+  }
+  .collection-tile__link {
+    display: grid;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+  .collection-tile__media img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  .collection-tile__content {
+    padding: 1rem;
+    display: grid;
+    gap: 0.5rem;
+    background: #f8f8f8;
+  }
+  .collection-tile__content h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .collection-tile__placeholder {
+    display: grid;
+    place-items: center;
+    min-height: 220px;
+    background: #f4f4f4;
+    color: rgba(17, 17, 17, 0.6);
+  }
+
+  @media (min-width: 992px) {
+    .home-featured-collections__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Eyebrow text",
+      "default": "Shop by edit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Curated looks for every day"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Supporting text",
+      "default": "Discover the fits your wardrobe is craving. Tap a drop to explore the collection."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection tile",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Tile heading",
+          "default": "Best sellers"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Tile link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Featured collections",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}
